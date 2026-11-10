@@ -1,7 +1,5 @@
-import AddJob from "./AddJob";
-import AllJob from "./AllJob";
-import Profile from "./Profile";
-import SharedLayout from "./SharedLayout";
-import Stats from "./Stats";
-
-export default { AllJob, AddJob, Profile, Stats, SharedLayout };
+export { default as Stats } from "./Stats";
+export { default as Profile } from "./Profile";
+export { default as AddJob } from "./AddJob";
+export { default as AllJobs } from "./AllJobs";
+export { default as SharedLayout } from "./SharedLayout";
