@@ -4,10 +4,12 @@ import { toast } from "react-toastify";
 import {
   addUserToLocalStorage,
   getUserFromLocalStorage,
+  removeUserFromLocalStorage,
 } from "../../utils/localStorage";
 
 const initialState = {
   isLoading: false,
+  isSidebaOpen: false,
   user: getUserFromLocalStorage(),
 };
 export const registerUser = createAsyncThunk(
@@ -36,7 +38,16 @@ export const loginUser = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    logoutUser: (state) => {
+      state.user = null;
+      state.isSidebaOpen = false;
+      removeUserFromLocalStorage();
+    },
+    toggleSidebar: (state) => {
+      state.isSidebaOpen = !state.isSidebaOpen;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
@@ -67,26 +78,27 @@ const userSlice = createSlice({
       .addCase(loginUser.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
-      })
-      .addCase(updateUser.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(updateUser.fulfilled, (state, { payload }) => {
-        const { user } = payload;
-        state.isLoading = false;
-        state.user = user;
-        addUserToLocalStorage(user);
-
-        toast.success(`User Updated!`);
-      })
-      .addCase(updateUser.rejected, (state, { payload }) => {
-        state.isLoading = false;
-        toast.error(payload);
-      })
-      .addCase(clearStore.rejected, () => {
-        toast.error("There was an error..");
       });
+    // .addCase(updateUser.pending, (state) => {
+    //   state.isLoading = true;
+    // });
+    // .addCase(updateUser.fulfilled, (state, { payload }) => {
+    //   const { user } = payload;
+    //   state.isLoading = false;
+    //   state.user = user;
+    //   addUserToLocalStorage(user);
+
+    //   toast.success(`User Updated!`);
+    // })
+    // .addCase(updateUser.rejected, (state, { payload }) => {
+    //   state.isLoading = false;
+    //   toast.error(payload);
+    // })
+    // .addCase(clearStore.rejected, () => {
+    //   toast.error("There was an error..");
+    // });
   },
 });
 
+export const { logoutUser, toggleSidebar } = userSlice.actions;
 export default userSlice.reducer;

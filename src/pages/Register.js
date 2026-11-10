@@ -96,7 +96,7 @@ function Register() {
           {values.isMember ? "Not a member yet?" : "Already a member?"}
           <button
             type="submit"
-            onClick={toggleMember}
+            onClick={console.log("log")}
             className="member-btn"
             disabled={isLoading}
           >
