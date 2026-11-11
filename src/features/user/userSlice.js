@@ -49,6 +49,8 @@ export const updateUser = createAsyncThunk(
           authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
         },
       });
+
+      console.log(resp);
       return resp.data;
     } catch (error) {
       console.log(error.response);
