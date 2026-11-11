@@ -1,27 +1,24 @@
 import NavLinks from "./NavLinks";
-import Logo from "../components/Logo";
+import Logo from "./Logo";
 import Wrapper from "../assets/wrappers/BigSidebar";
-import { useDispatch, useSelector } from "react-redux";
-import { toggleSidebar } from "../features/user/userSlice";
+import { useSelector } from "react-redux";
 
 const BigSidebar = () => {
   const { isSidebarOpen } = useSelector((store) => store.user);
-  const dispatch = useDispatch();
-  const toggle = dispatch(toggleSidebar());
+
   return (
     <Wrapper>
       <div
         className={
-          isSidebarOpen
-            ? "sidebar-container "
-            : "sidebar-container show-sidebar"
+          isSidebarOpen ? "sidebar-container" : "sidebar-container show-sidebar"
         }
       >
         <div className="content">
           <header>
             <Logo />
           </header>
-          <NavLinks toggleSidebar={toggle} />
+
+          <NavLinks />
         </div>
       </div>
     </Wrapper>

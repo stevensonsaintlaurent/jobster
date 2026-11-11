@@ -10,40 +10,44 @@ const Navbar = () => {
   const [showLogout, setShowLogout] = useState(false);
   const { user } = useSelector((store) => store.user);
   const dispatch = useDispatch();
-  const toggle = dispatch(toggleSidebar());
+
+  const toggle = () => {
+    dispatch(toggleSidebar());
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    setShowLogout(false);
+  };
 
   return (
     <Wrapper>
       <div className="nav-center">
-        <button
-          type="button"
-          className="toggle-btn"
-          onClick={() => console.log("log1")}
-        >
+        <button type="button" className="toggle-btn" onClick={toggle}>
           <FaAlignLeft />
         </button>
+
         <div>
           <Logo />
           <h3 className="logo-text">dashboard</h3>
         </div>
+
         <div className="btn-container">
           <button
             type="button"
             className="btn"
-            onClick={() => console.log("toggle logout dropdown")}
+            onClick={() => setShowLogout(!showLogout)}
           >
             <FaUserCircle />
-            {user?.name}
+            {user?.name || "User"}
             <FaCaretDown />
           </button>
+
           <div className={showLogout ? "dropdown show-dropdown" : "dropdown"}>
             <button
               type="button"
               className="dropdown-btn"
-              onClick={() => {
-                // dispatch(logoutUser());
-                console.log("logout user ");
-              }}
+              onClick={handleLogout}
             >
               logout
             </button>

@@ -12,6 +12,8 @@ const initialState = {
   isSidebarOpen: false,
   user: getUserFromLocalStorage(),
 };
+
+// =========================== Register User ====================================
 export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (user, thunkAPI) => {
@@ -19,10 +21,13 @@ export const registerUser = createAsyncThunk(
       const resp = await customFetch.post("/auth/register", user);
       return resp.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.msg);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.msg || "Registration failed",
+      );
     }
   },
 );
+// =========================== Login User  ====================================
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (user, thunkAPI) => {
@@ -34,8 +39,23 @@ export const loginUser = createAsyncThunk(
     }
   },
 );
-
-export const updateUser = createAsyncThunk("user/updateUser", async () => {});
+// =========================== Update user ====================================
+export const updateUser = createAsyncThunk(
+  "user/updateUser",
+  async (user, thunkAPI) => {
+    try {
+      const resp = await customFetch.patch("/auth/updateUser", user, {
+        headers: {
+          authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
+        },
+      });
+      return resp.data;
+    } catch (error) {
+      console.log(error.response);
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  },
+);
 
 export const clearStore = createAsyncThunk("user/clearStore", async () => {});
 

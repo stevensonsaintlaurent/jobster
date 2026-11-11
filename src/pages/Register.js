@@ -49,11 +49,13 @@ function Register() {
   };
 
   useEffect(() => {
-    if (user) {
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
-    }
+    if (!user) return;
+
+    const timer = setTimeout(() => {
+      navigate("/");
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, [user, navigate]);
 
   return (
@@ -89,18 +91,18 @@ function Register() {
           labelText="Password"
         />
 
-        <button type="submit" className="btn btn-block">
-          {isLoading ? "loading..." : "submit"}
+        <button type="submit" className="btn btn-block" disabled={isLoading}>
+          {isLoading ? "Loading..." : "Submit"}
         </button>
         <p>
           {values.isMember ? "Not a member yet?" : "Already a member?"}
           <button
-            type="submit"
-            onClick={() => console.log("log")}
+            type="button"
+            onClick={toggleMember}
             className="member-btn"
             disabled={isLoading}
           >
-            {!values.isMember ? "Login" : "Register "}
+            {values.isMember ? "Register" : "Login"}
           </button>
         </p>
       </form>
