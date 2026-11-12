@@ -29,6 +29,7 @@ const Profile = () => {
     const name = e.target.name;
     const value = e.target.value;
     setUserData({ ...userData, [name]: value });
+    dispatch(updateUser({ name, value }));
   };
   return (
     <Wrapper>
