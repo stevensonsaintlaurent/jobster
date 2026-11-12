@@ -24,12 +24,12 @@ const Profile = () => {
       toast.error("Please Fill Out All Fields");
       return;
     }
+    dispatch(updateUser({ name, email, lastName, location }));
   };
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
     setUserData({ ...userData, [name]: value });
-    dispatch(updateUser({ name, value }));
   };
   return (
     <Wrapper>

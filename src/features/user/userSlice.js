@@ -35,7 +35,7 @@ export const loginUser = createAsyncThunk(
 export const updateUser = createAsyncThunk(
   "user/updateUser",
   async (user, thunkAPI) => {
-    return updateUserThunk("auth/updateUser", user, thunkAPI);
+    return updateUserThunk("/auth/updateUser", user, thunkAPI);
   },
 );
 
@@ -73,23 +73,27 @@ const userSlice = createSlice({
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(loginUser.fulfilled, (state, { payload }) => {
+
+      // =========================== Update User ====================================
+
+      .addCase(updateUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateUser.fulfilled, (state, { payload }) => {
         const { user } = payload;
+
         state.isLoading = false;
         state.user = user;
+
         addUserToLocalStorage(user);
 
-        toast.success(`Welcome Back ${user.name}`);
+        toast.success("User Updated Successfully!");
       })
-      .addCase(loginUser.rejected, (state, { payload }) => {
+      .addCase(updateUser.rejected, (state, { payload }) => {
         state.isLoading = false;
-        toast.error(payload);
-      })
 
-      .addCase(updateUser.pending, (state) => {})
-      .addCase(updateUser.fulfilled, (state) => {})
-      .addCase(updateUser.rejected, (state) => {})
-      .addCase(clearStore.fulfilled, (state) => {});
+        toast.error(payload || "Failed to update user");
+      });
   },
 });
 
