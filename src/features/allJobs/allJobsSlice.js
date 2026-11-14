@@ -33,8 +33,6 @@ export const getAllJobs = createAsyncThunk(
         },
       });
 
-      console.log("from all jobs slice:", resp.data);
-
       return resp.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
@@ -45,7 +43,6 @@ export const getAllJobs = createAsyncThunk(
 const allJobsSlice = createSlice({
   name: "allJobs",
   initialState,
-  reducers: {},
 
   extraReducers: (builder) => {
     builder

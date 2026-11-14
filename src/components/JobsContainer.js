@@ -9,8 +9,6 @@ const JobsContainer = () => {
   const { jobs, isLoading } = useSelector((store) => store.allJobs);
   const dispatch = useDispatch();
 
-  console.log("from job container", jobs);
-
   useEffect(() => {
     dispatch(getAllJobs());
   }, []);
