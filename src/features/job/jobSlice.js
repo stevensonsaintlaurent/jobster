@@ -17,6 +17,22 @@ const initialState = {
   editJobId: "",
 };
 
+export const editJob = createAsyncThunk(
+  "job/editJob",
+  async ({ jobId, job }, thunkAPI) => {
+    try {
+      const resp = await customFetch.patch(`/jobs/${jobId}`, job, {
+        headers: {
+          authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
+        },
+      });
+      thunkAPI.dispatch(clearValues());
+      return resp.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
+    }
+  },
+);
 export const createJob = createAsyncThunk(
   "job/createJob",
   async (job, thunkAPI) => {
@@ -27,6 +43,7 @@ export const createJob = createAsyncThunk(
         },
       });
       thunkAPI.dispatch(clearValues());
+      console.log(resp.data);
       return resp.data;
     } catch (error) {
       if (error.response.status === 401) {
@@ -52,19 +69,21 @@ const jobSlice = createSlice({
       };
     },
   },
-  // extraReducers: {
-  //   [createJob.pending]: (state) => {
-  //     state.isLoading = true;
-  //   },
-  //   [createJob.fulfilled]: (state) => {
-  //     state.isLoading = false;
-  //     toast.success("Job Created");
-  //   },
-  //   [createJob.rejected]: (state, { payload }) => {
-  //     state.isLoading = false;
-  //     toast.error(payload);
-  //   },
-  // },
+
+  extraReducers: (builder) => {
+    builder
+      .addCase(createJob.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createJob.fulfilled, (state) => {
+        state.isLoading = false;
+        toast.success("Job Created");
+      })
+      .addCase(createJob.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload || "Failed to create job");
+      });
+  },
 });
 
 export const { handleChange, clearValues } = jobSlice.actions;

@@ -76,26 +76,35 @@ const userSlice = createSlice({
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
       })
+      .addCase(loginUser.fulfilled, (state, { payload }) => {
+        const { user } = payload;
+        state.isLoading = false;
+        state.user = user;
+        addUserToLocalStorage(user);
 
-      // =========================== Update User ====================================
-
+        toast.success(`Welcome Back ${user.name}`);
+      })
+      .addCase(loginUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload);
+      })
       .addCase(updateUser.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(updateUser.fulfilled, (state, { payload }) => {
         const { user } = payload;
-
         state.isLoading = false;
         state.user = user;
-
         addUserToLocalStorage(user);
 
-        toast.success("User Updated Successfully!");
+        toast.success(`User Updated!`);
       })
       .addCase(updateUser.rejected, (state, { payload }) => {
         state.isLoading = false;
-
-        toast.error(payload || "Failed to update user");
+        toast.error(payload);
+      })
+      .addCase(clearStore.rejected, () => {
+        toast.error("There was an error..");
       });
   },
 });

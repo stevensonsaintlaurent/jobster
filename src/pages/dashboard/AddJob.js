@@ -31,8 +31,8 @@ const AddJob = () => {
     if (!position || !company || !jobLocation) {
       toast.error("Please Fill Out All Fields");
       return;
-      dispatch(createJob({ position, company, jobLocation, jobType, status }));
     }
+    dispatch(createJob({ position, company, jobLocation, jobType, status }));
   };
   const handleJobInput = (e) => {
     const name = e.target.name;
